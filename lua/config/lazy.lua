@@ -12,7 +12,14 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	spec = {
-		{ import = "plugins"}
-	}
+    spec = {
+        { import = "plugins"}
+    },
+    performance = {
+        rtp = {
+            disabled_plugins = {
+                -- "cappuccin",
+            },
+        },
+    },
 })
