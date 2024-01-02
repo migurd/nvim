@@ -13,8 +13,17 @@ return {
         "windwp/nvim-autopairs",
         {
             "zbirenbaum/copilot-cmp",
+            dependencies = {
+                "zbirenbaum/copilot.lua",
+                cmd = { "Copilot" },
+                event = { "VeryLazy" },
+                opts = {
+                    suggestion = { enabled = false },
+                    panel = { enabled = false },
+                },
+            },
+            config = true,
         },
-        config = true,
     },
     event = "VeryLazy",
     config = function()
