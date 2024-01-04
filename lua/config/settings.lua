@@ -1,5 +1,6 @@
 vim.o.number = true
 vim.g.mapleader = " "
+vim.o.relativenumber = true
 --vim.cmd.colorscheme("slate")
 
 -- Set tab width to 4 spaces
