@@ -22,9 +22,6 @@ return {
             "sql",
             "typescript",
         },
-        highlight = {
-            enable = true,
-        },
         indent = {
             enable = true,
         },
