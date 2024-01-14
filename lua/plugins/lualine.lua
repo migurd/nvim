@@ -1,51 +1,52 @@
 return {
-  "nvim-lualine/lualine.nvim",
-  dependencies = { "kyazdani42/nvim-web-devicons" },
-  config = function()
-    require("lualine").setup {
-      options = {
-        theme = "auto",
-        icons_enabled = true,
-        globalstatus = true,
-      },
-      extensions = { "quickfix", "fugitive" },
-      sections = {
-        lualine_a = { { "mode", upper = true } },
-        lualine_b = { { "branch", icon = "" }, "db_ui#statusline" },
-        lualine_c = { { "filename", file_status = true, path = 1 } },
-        lualine_x = {
-          "diagnostics",
-          "diff",
-          {
-            require("noice").api.status.mode.get,
-            cond = require("noice").api.status.mode.has,
-            color = { fg = "#ff9e64" },
-          },
-          {
-            require("lazy.status").updates,
-            cond = require("lazy.status").has_updates,
-            color = { fg = "ff9e64" },
-          },
+    {
+        'nvim-lualine/lualine.nvim',
+        event = 'VeryLazy',
+        opts = {
+            options = {
+                theme = 'one_monokai',
+                component_separators = '|',
+                section_separators = '',
+            },
+            sections = {
+                lualine_b = { 'branch', 'diff' },
+                lualine_c = {
+                    {
+                        function()
+                            return require('noice').api.status.lsp_progress.get_hl()
+                        end,
+                        cond = function()
+                            return package.loaded['noice'] and require('noice').api.status.lsp_progress.has()
+                        end,
+                    },
+                    {
+                        function()
+                            return require('noice').api.status.mode.get()
+                        end,
+                        cond = function()
+                            return package.loaded['noice'] and require('noice').api.status.mode.has()
+                        end,
+                    },
+                },
+                lualine_x = {
+                    {
+                        'diagnostics',
+                        sections = { 'error', 'warn', 'info', 'hint' },
+                    },
+                },
+                lualine_y = { 'encoding', 'filetype' },
+            },
         },
-        lualine_y = { "filetype" },
-        lualine_z = { "location" },
-      },
-      winbar = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { "filename" },
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = {},
-      },
-      inactive_winbar = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { "filename" },
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = {},
-      },
-    }
-  end,
+        config = function(_, opts)
+            require('lualine').setup(opts)
+
+            -- Disable this since the mode will be displayed by lualine.
+            vim.o.showmode = false
+
+            -- Update the statusline with the latest LSP message on LSP progress events.
+            vim.cmd [[
+                autocmd User LspProgressUpdate redrawstatus
+            ]]
+        end,
+    },
 }
