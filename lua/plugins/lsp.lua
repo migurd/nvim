@@ -58,5 +58,8 @@ return {
         lspconfig.tsserver.setup{
             on_attach = on_attach,
         }
+        lspconfig.pyright.setup {
+            on_attach = on_attach,
+        }
     end
 }
