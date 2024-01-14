@@ -13,7 +13,14 @@ return {
             -- Enable completion triggered by <c-x><c-o>
             vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
             -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr})
-            
+
+            -- Additional diagnostics handler with delay for updates
+            vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+                vim.lsp.diagnostic.on_publish_diagnostics, {
+                    update_in_insert = true,
+                }
+            )
+
             -- Buffer local mappings.
             -- See `:help vim.lsp.*` for documentation on any of the below functions
             local opts = { buffer = bufnr }
@@ -31,9 +38,13 @@ return {
             vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
             vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
             vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-            vim.keymap.set('n', '<space>f', function()
-                vim.lsp.buf.format { async = true }
-            end, opts)
+
+            -- Use the on_attach function for other client-specific configurations
+            if client.resolved_capabilities.document_formatting then
+                buf_set_keymap('n', '<space>f', function()
+                    vim.lsp.buf.format { async = true }
+                end, opts)
+            end
         end
 
         -- Setup language servers.
