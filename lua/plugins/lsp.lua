@@ -49,6 +49,7 @@ return {
 
         -- Setup language servers.
         local lspconfig = require'lspconfig'
+
         lspconfig.clangd.setup({
             on_attach = on_attach,
         })
@@ -58,7 +59,19 @@ return {
         lspconfig.tsserver.setup{
             on_attach = on_attach,
         }
+        lspconfig.vtsls.setup{
+            on_attach = on_attach,
+        }
         lspconfig.pyright.setup {
+            on_attach = on_attach,
+        }
+        lspconfig.cssls.setup {
+            on_attach = on_attach,
+        }
+        lspconfig.html.setup {
+            on_attach = on_attach,
+        }
+        lspconfig.emmet_language_server.setup {
             on_attach = on_attach,
         }
     end
