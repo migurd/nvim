@@ -15,11 +15,11 @@ return {
             -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr})
 
             -- Additional diagnostics handler with delay for updates
-            vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+--[[             vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
                 vim.lsp.diagnostic.on_publish_diagnostics, {
                     update_in_insert = true,
                 }
-            )
+            ) ]]
 
             -- Buffer local mappings.
             -- See `:help vim.lsp.*` for documentation on any of the below functions
