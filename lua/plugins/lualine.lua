@@ -4,7 +4,7 @@ return {
         event = 'VeryLazy',
         opts = {
             options = {
-                theme = 'one_monokai',
+                -- theme = 'one_monokai',
                 component_separators = '|',
                 section_separators = '',
             },
