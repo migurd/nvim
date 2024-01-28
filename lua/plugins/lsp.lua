@@ -15,7 +15,7 @@ return {
             -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr})
 
             -- Additional diagnostics handler with delay for updates
---[[             vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+            --[[             vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
                 vim.lsp.diagnostic.on_publish_diagnostics, {
                     update_in_insert = true,
                 }
@@ -48,36 +48,23 @@ return {
         end
 
         -- Setup language servers.
-        local lspconfig = require'lspconfig'
+        local nvim_lsp = require("lspconfig")
 
-        lspconfig.clangd.setup({
-            on_attach = on_attach,
-        })
-        lspconfig.lua_ls.setup({
-            on_attach = on_attach,
-            settings = {
-                Lua = {
-                    diagnostics = {globals = {'vim'}},
-                },
-            },
-        })
-        lspconfig.tsserver.setup{
-            on_attach = on_attach,
+        -- TODO Fix cssls completion
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+
+        local servers = {
+            "html",
+            "cssls",
+            "tsserver"
         }
-        lspconfig.vtsls.setup{
-            on_attach = on_attach,
-        }
-        lspconfig.pyright.setup {
-            on_attach = on_attach,
-        }
-        lspconfig.cssls.setup {
-            on_attach = on_attach,
-        }
-        lspconfig.html.setup {
-            on_attach = on_attach,
-        }
-        lspconfig.emmet_language_server.setup {
-            on_attach = on_attach,
-        }
+
+        for _, lsp in ipairs(servers) do
+            nvim_lsp[lsp].setup {
+                capabilities = capabilities,
+                on_attach = on_attach,
+            }
+        end
     end
 }
