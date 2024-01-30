@@ -2,7 +2,7 @@ vim.o.number = true
 vim.g.mapleader = " "
 vim.o.relativenumber = true
 vim.o.cursorline = true
-vim.o.colorscheme = "tokyonight-night"
+-- vim.o.colorscheme = "tokyonight-night"
 
 -- Set tab width to 4 spaces
 vim.o.tabstop = 4
