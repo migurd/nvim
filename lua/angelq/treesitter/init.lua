@@ -1,0 +1,1 @@
+require "angelq.treesitter.config"

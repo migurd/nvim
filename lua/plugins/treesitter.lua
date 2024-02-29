@@ -16,11 +16,13 @@ return {
             "html",
             "java",
             "javascript",
+            "typescript",
+            "json",
+            "tsx",
             "lua",
             "luadoc",
             "rust",
             "sql",
-            "typescript",
         },
         indent = {
             enable = true,
@@ -56,4 +58,7 @@ return {
             )
         end,
     },
+    config = function()
+        require "angelq.treesitter"
+    end
 }

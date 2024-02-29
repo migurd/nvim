@@ -9,17 +9,9 @@ return {
         vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
         vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
 
-        local on_attach = function(_, bufnr)
+        local on_attach = function(client, bufnr)
             -- Enable completion triggered by <c-x><c-o>
             vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
-            -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr})
-
-            -- Additional diagnostics handler with delay for updates
-            --[[             vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-                vim.lsp.diagnostic.on_publish_diagnostics, {
-                    update_in_insert = true,
-                }
-            ) ]]
 
             -- Buffer local mappings.
             -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -41,8 +33,8 @@ return {
 
             -- Use the on_attach function for other client-specific configurations
             if client.resolved_capabilities.document_formatting then
-                buf_set_keymap('n', '<space>f', function()
-                    vim.lsp.buf.format { async = true }
+                vim.keymap.set('n', '<space>f', function()
+                    vim.lsp.buf.formatting()
                 end, opts)
             end
         end
@@ -50,20 +42,62 @@ return {
         -- Setup language servers.
         local nvim_lsp = require("lspconfig")
 
-        -- TODO Fix cssls completion
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-
+        -- Language servers configurations
         local servers = {
-            "html",
-            "cssls",
-            "tsserver"
+            -- HTML language server
+            html = {
+                filetypes = { "html", "htmldjango", "ejs" },
+                init_options = {
+                    configurationSection = { "html", "css", "javascript" },
+                    embeddedLanguages = {
+                        css = true,
+                        javascript = true
+                    }
+                },
+                root_dir = function(fname)
+                    return nvim_lsp.util.find_git_ancestor(fname) or nvim_lsp.util.path.dirname(fname)
+                end,
+                settings = {}
+            },
+            -- JavaScript language server (for JavaScript and TypeScript files)
+            tsserver = {
+                filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "html" },
+                root_dir = nvim_lsp.util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+            },
+            -- CSS language server
+            cssls = {
+                filetypes = { "css", "scss", "less", "html" },
+                root_dir = nvim_lsp.util.root_pattern("package.json", ".git"),
+            },
+            -- EMMET
+            emmet_language_server = {
+                filetypes = { "html", "htmldjango", "ejs" },
+                init_options = {
+                    configurationSection = { "html", "css", "javascript" },
+                    embeddedLanguages = {
+                        css = true,
+                        javascript = true
+                    }
+                },
+                root_dir = function(fname)
+                    return nvim_lsp.util.find_git_ancestor(fname) or nvim_lsp.util.path.dirname(fname)
+                end,
+                settings = {}
+            }
         }
 
-        for _, lsp in ipairs(servers) do
+        -- Loop through the servers table and set up each language server
+        for lsp, config in pairs(servers) do
             nvim_lsp[lsp].setup {
-                capabilities = capabilities,
                 on_attach = on_attach,
+                capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
+                flags = {
+                    debounce_text_changes = 150,
+                },
+                settings = config.settings,
+                init_options = config.init_options,
+                filetypes = config.filetypes,
+                root_dir = config.root_dir,
             }
         end
     end

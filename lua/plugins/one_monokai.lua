@@ -6,6 +6,6 @@ return {
         require("one_monokai").setup({
             transparent = true,
         })
-        -- vim.o.colorscheme = "one_monokai"
+        vim.o.colorscheme = "one_monokai"
     end,
 }

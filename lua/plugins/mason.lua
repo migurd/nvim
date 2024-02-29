@@ -19,6 +19,8 @@ return {
                 'tailwindcss',
                 'emmet_language_server',
                 'bashls',
+                -- 'prettier',
+                -- 'prettierd',
             }
         })
 
