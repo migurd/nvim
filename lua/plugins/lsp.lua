@@ -58,7 +58,7 @@ return {
                     return nvim_lsp.util.find_git_ancestor(fname) or nvim_lsp.util.path.dirname(fname)
                 end,
                 settings = {}
-            },
+            }, 
             -- JavaScript language server (for JavaScript and TypeScript files)
             tsserver = {
                 filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "html" },

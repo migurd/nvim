@@ -1,15 +1,55 @@
--- EJS
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.ejs = {
-    install_info = {
-        url = "https://github.com/tree-sitter/tree-sitter-embedded-template", -- local path or git repo
-        files = {"src/parser.c"}, -- note that some parsers also require src/scanner.c or src/scanner.cc
-        -- optional entries:
-        branch = "master", -- default branch in case of git repo if different from master
-        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-        requires_generate_from_grammar = true, -- if folder contains pre-generated src/parser.c
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = {
+        "c",
+        "c_sharp",
+        "cpp",
+        "go",
+        "java",
+        "css",
+        "html",
+        "javascript",
+        "typescript",
+        "json",
+        "tsx",
+        "lua",
+        "luadoc",
+        "rust",
+        "sql",
     },
-    filetype = "ejs", -- if filetype does not match the parser name
+    highlight = {
+        enable = true,
+    },
+    indent = {
+        enable = true,
+    },
+    textobjects = {
+        select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@conditional.outer",
+                ["ic"] = "@conditional.inner",
+                ["al"] = "@loop.outer",
+                ["il"] = "@loop.inner",
+            },
+        },
+    },
+    autotag = {
+        enable = true,
+    },
+    on_attach = function(client)
+        vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+            vim.lsp.diagnostic.on_publish_diagnostics,
+            {
+                underline = true,
+                virtual_text = {
+                    spacing = 5,
+                    severity_limit = 'Warning',
+                },
+                update_in_insert = true,
+            }
+        )
+    end,
 }
-
-
