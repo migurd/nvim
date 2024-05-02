@@ -9,6 +9,7 @@ return {
         require('mason').setup({})
         require('mason-lspconfig').setup({
             ensure_installed = {
+                'lua_ls',
                 'clangd',
                 'pyright',
                 'html',
@@ -19,8 +20,16 @@ return {
                 'tailwindcss',
                 'emmet_language_server',
                 'bashls',
-                -- 'prettier',
-                -- 'prettierd',
+                'dart-debug-adapter',
+                'arduino_language_server',
+                'dockerls',
+                'golangci_lint_ls',
+                'gopls',
+                'kotlin_language_server',
+                'jdtls',
+                'grammarly',
+                'prettier',
+                'prettierd',
             }
         })
 
