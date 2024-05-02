@@ -83,7 +83,9 @@ return {
                     return nvim_lsp.util.find_git_ancestor(fname) or nvim_lsp.util.path.dirname(fname)
                 end,
                 settings = {}
-            }
+            },
+            -- FLUTTER
+            dartls = {},
         }
 
         -- Loop through the servers table and set up each language server
